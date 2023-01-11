@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  postgresql:
+    image: postgres:alpine
+    container_name: postgresql
+    restart: always
+    env_file:
+      - ./.env.development
+    volumes:
+      - ./data/psql:/var/lib/postgresql/data
+    ports:
+      - ${POSTGRES_PORT}:5432
