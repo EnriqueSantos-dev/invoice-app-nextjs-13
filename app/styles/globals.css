@@ -31,6 +31,10 @@
   }
 }
 
+body {
+  @apply min-h-screen
+}
+
 #portal {
   position: fixed;
   top: 0;
