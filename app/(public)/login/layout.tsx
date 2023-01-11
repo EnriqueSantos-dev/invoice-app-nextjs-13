@@ -17,6 +17,8 @@ export default async function Layout({
   await getData();
 
   return (
-    <main className="relative h-screen inset-0 bg-offWhite">{children}</main>
+    <main className="relative h-screen inset-0 bg-offWhite px-6 md:px-0">
+      {children}
+    </main>
   );
 }
