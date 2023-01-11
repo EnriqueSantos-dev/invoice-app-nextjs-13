@@ -13,9 +13,6 @@
     "docker:down": "docker-compose down",
     "format": "prettier --write . './app/**/*.+(tsx)'"
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
     "@next-auth/prisma-adapter": "^1.0.5",
