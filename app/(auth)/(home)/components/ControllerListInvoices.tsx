@@ -21,8 +21,7 @@ export default function ControllerListInvoices() {
   const { data, hasNextPage, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
       queryKey: ["invoices"],
-      queryFn: ({ pageParam }) =>
-        getInvoices({ cursor: pageParam?.nextCursor }),
+      queryFn: ({ pageParam = null }) => getInvoices({ cursor: pageParam }),
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     });
 
