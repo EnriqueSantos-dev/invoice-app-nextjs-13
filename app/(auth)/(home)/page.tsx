@@ -1,5 +1,5 @@
 import ActiveBar from "@/app/components/ActiveBar";
-import InvoiceItemSkeleton from "@/app/components/InvoiceItemSkeleton";
+import InvoiceItemSkeleton from "@/app/components/InvoiceSkeleton";
 import dbGetInvoicesCount from "@/lib/prisma/db-get-invoices-count";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
