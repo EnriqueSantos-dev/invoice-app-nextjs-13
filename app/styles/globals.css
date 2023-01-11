@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .checkboxCustom {
+    @apply relative appearance-none w-4 h-4 bg-[#dfe3fa] dark:bg-mirage rounded-[2px] border border-transparent focus:border-purple outline-none p-px hover:border-purple cursor-pointer checked:bg-purple dark:checked:bg-purple transition-colors lg:w-5 lg:h-5;
+  }
+
+  .checkboxCustom::before {
+    content: "";
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  .checkboxCustom:checked::before {
+    background-color: white;
+  }
+
+  @media (min-width: 768px) {
+    .checkboxCustom::before {
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+#portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.blocking-scroll {
+  max-height: 100vh;
+  overflow: hidden;
+}
