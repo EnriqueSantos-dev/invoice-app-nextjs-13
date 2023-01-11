@@ -361,7 +361,7 @@ export default function FormCreateNewInvoice({
 
             <div
               className={clsx(
-                "absolute -left-6 flex w-[calc(100%_+_48px)] flex-wrap-reverse items-center justify-center gap-3 bg-ebony p-6 md:static md:w-auto md:bg-transparent md:px-0",
+                "absolute -left-6 flex w-[calc(100%_+_48px)] flex-wrap-reverse items-center justify-center gap-3 bg-transparent dark:bg-mirage2 px-6 py-6 md:p-[1.5rem_1.5rem_0] md:static md:w-auto md:bg-transparent md:px-0",
                 {
                   "sm:justify-between": !isEditing,
                   "sm:justify-end": isEditing,
