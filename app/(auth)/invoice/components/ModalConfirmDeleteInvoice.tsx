@@ -32,7 +32,7 @@ export default function ModalConfirmDeleteInvoice({
       <div
         ref={overlayRef}
         className={clsx(
-          "inset fixed z-50 h-screen w-screen bg-overlay px-6 transition-all duration-150 md:px-0",
+          "inset fixed z-50 h-screen w-screen bg-overlay transition-all duration-150",
           {
             "invisible opacity-0": !isOpen,
             "pointer-events-auto visible opacity-100": isOpen,
@@ -42,7 +42,7 @@ export default function ModalConfirmDeleteInvoice({
         <div
           role="dialog"
           className={clsx(
-            "duration-250 relative left-1/2 top-1/2 w-full origin-center -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg bg-offWhite p-8 md:p-12 transition-transform duration-300 dark:bg-mirage md:max-w-md",
+            "duration-250 absolute bottom-0 left-0 sm:left-1/2 sm:top-1/2 w-full origin-center sm:-translate-x-1/2 sm:-translate-y-1/2 overflow-hidden sm:rounded-lg bg-offWhite p-8 sm:p-12 transition-transform duration-300 dark:bg-mirage sm:max-w-md",
             {
               "scale-0": !isOpen,
               "scale-100": isOpen,
@@ -53,7 +53,7 @@ export default function ModalConfirmDeleteInvoice({
             Confirm Deletion
           </h1>
           <p className="mb-6 text-shipCove text-sm">
-            Are you sure you want to delete invoice &nbsp;
+            Are you sure you want to delete invoice&nbsp;
             <span className="font-bold uppercase">#{shortId}?</span> This action
             cannot be undone.
           </p>
