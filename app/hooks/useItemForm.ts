@@ -1,3 +1,5 @@
+"use client";
+
 import { useReducer } from "react";
 import { InvoiceItemPlusIdRandom } from "@/app/types";
 import { v4 as uuid } from "uuid";
