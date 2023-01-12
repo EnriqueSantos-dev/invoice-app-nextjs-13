@@ -42,7 +42,7 @@ export default function ModalConfirmDeleteInvoice({
         <div
           role="dialog"
           className={clsx(
-            "duration-250 absolute bottom-0 left-0 sm:left-1/2 sm:top-1/2 w-full origin-bottom sm:origin-center sm:-translate-x-1/2 sm:-translate-y-1/2 overflow-hidden sm:rounded-lg bg-offWhite px-8 py-12 sm:p-12 transition-transform duration-300 dark:bg-mirage sm:max-w-md sm:bottom-auto",
+            "duration-250 absolute bottom-0 left-0 sm:left-1/2 sm:top-1/2 w-full origin-bottom sm:origin-center sm:-translate-x-1/2 sm:-translate-y-1/2 overflow-hidden rounded-t-lg sm:rounded-lg bg-offWhite px-8 py-12 sm:p-12 transition-transform duration-300 dark:bg-mirage sm:max-w-md sm:bottom-auto",
             {
               "scale-0": !isOpen,
               "scale-100": isOpen,
