@@ -10,7 +10,7 @@ Nesse projeto eu pude aprender a usar o framework NextJs na sua versão 13 e faz
 
 ## Stack utilizada
 
-**Full-stack:** NextJS, Next-Auth, Zustand, TailwindCSS, Tanstack-query
+**Full-stack:** nextJS, next-auth, zustand, tailwindCSS, tanstack-query, react-hook-form, zod...
 
 
 
