@@ -21,6 +21,7 @@ export default function Controller({ initialData }: Props) {
     queryFn: () => getInvoiceById({ invoiceId: initialData.id }),
     suspense: true,
     initialData,
+    staleTime: 5000,
   });
 
   function formatDate(date: Date): string {
@@ -141,7 +142,8 @@ export default function Controller({ initialData }: Props) {
           </div>
           <TableItems items={data?.items!} />
           <div className="flex items-center justify-between bg-otherDark px-6 py-8 dark:bg-vulcan">
-            <p className="text-white">Amount Due</p>
+            <p className="text-white text-sm md:hidden">Grand total</p>
+            <p className="text-white text-sm hidden md:block">Amount Due</p>
             <p className="text-2xl font-bold text-white">
               {formatPrice(calculateTotalAmountDue(data?.items!))}
             </p>

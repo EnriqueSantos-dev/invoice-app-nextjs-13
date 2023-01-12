@@ -1,5 +1,4 @@
-export const dynamicParams = true;
-export const dynamic = "auto";
+export const fetchCache = "force-no-store";
 
 export default async function Layout({
   children,

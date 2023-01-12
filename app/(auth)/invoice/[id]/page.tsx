@@ -7,12 +7,6 @@ type PageProps = {
   params: { id: string };
 };
 
-export async function getStaticParams() {
-  const invoices = await dbGetInvoices({});
-  const params = invoices.invoices.map((invoice) => ({ id: invoice.id }));
-  return params;
-}
-
 async function getData(id: string) {
   const invoice = await dbGetInvoiceById({ invoiceId: id });
 
