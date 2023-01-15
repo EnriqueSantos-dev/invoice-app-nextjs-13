@@ -6,7 +6,7 @@ Esse projeto faz parte de um desafio que pode ser encontrado no site: [https://w
 Basicamente o desafio consiste em fazer um aplicativo web fullstack.
 ## Aprendizados
 
-Nesse projeto eu pude aprender a usar o framework NextJs na sua versão 13 e fazer um app fulstack de ponta a ponta, utlizando as melhores práticas de SEO, custom-hooks na prática e afins. Aproveitando a orpotunidade abaixo estarão todas as tecnologias utilizadas no projeto.
+Nesse projeto eu pude aprender a usar o framework NextJs na sua versão 13 e fazer um app fulstack de ponta a ponta, utlizando as melhores práticas de SEO, custom-hooks na prática e afins. Aproveitando a oportunidade abaixo estarão todas as tecnologias utilizadas no projeto.
 
 ## Stack utilizada
 
