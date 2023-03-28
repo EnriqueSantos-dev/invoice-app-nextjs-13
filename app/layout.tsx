@@ -2,9 +2,9 @@ import "@/app/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Providers from "./components/Providers";
-import { League_Spartan } from "@next/font/google";
+import { League_Spartan } from "next/font/google";
 
-const roboto = League_Spartan({
+const leagueSpartan = League_Spartan({
   weight: ["400", "500", "700"],
   adjustFontFallback: true,
   subsets: ["latin"],
@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={roboto.className}>
+    <html lang="en" className={leagueSpartan.className}>
       <head />
       <body>
         <Providers>{children}</Providers>
