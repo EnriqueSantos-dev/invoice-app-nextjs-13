@@ -12,6 +12,7 @@ import deleteInvoice from "@/app/services/deleteInvoice";
 import ModalConfirmDeleteInvoice from "../components/ModalConfirmDeleteInvoice";
 import FormInvoice from "@/app/components/form-invoice/FormInvoice";
 import useInvalidateQueries from "@/app/hooks/useInvalidateQueries";
+import clsx from "clsx";
 
 type ButtonsActionsProps = {
   invoice: Invoice;
@@ -95,7 +96,7 @@ export default function ButtonsActions({ invoice }: ButtonsActionsProps) {
         </button>
         <button
           type="button"
-          title="delete nvoice button"
+          title="delete invoice"
           className="h-12 rounded-3xl bg-burntSienna px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:opacity-80"
           onClick={() => setModalConfirmDeleteIsOpen(true)}
         >
@@ -105,12 +106,21 @@ export default function ButtonsActions({ invoice }: ButtonsActionsProps) {
         <button
           type="button"
           title="change status invoice button"
-          className="h-12 rounded-3xl bg-purple px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:bg-heliotrope hover:opacity-80"
+          className={clsx(
+            "h-12 rounded-3xl bg-purple px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:bg-heliotrope hover:opacity-80",
+            {
+              "cursor-not-allowed": changeStatusMutation.isLoading,
+            }
+          )}
           onClick={handleChangeStatus}
         >
-          {invoice.status === Status.PENDING
-            ? "mark as paid"
-            : "mark as pending"}
+          {changeStatusMutation.isLoading && "Changing..."}
+          {!changeStatusMutation.isLoading &&
+            invoice.status === Status.PENDING &&
+            "mark as paid"}
+          {!changeStatusMutation.isLoading &&
+            invoice.status === Status.PAID &&
+            "mark as pending"}
         </button>
       </div>
     </>
