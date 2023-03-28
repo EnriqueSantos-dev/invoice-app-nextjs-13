@@ -6,7 +6,7 @@ services:
     container_name: postgresql
     restart: always
     env_file:
-      - ./.env.development
+      - .env
     volumes:
       - ./data/psql:/var/lib/postgresql/data
     ports:

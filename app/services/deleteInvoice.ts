@@ -5,5 +5,5 @@ export default async function deleteInvoice({
 }: {
   invoiceId: string;
 }): Promise<void> {
-  await api.delete(`/invoice/${invoiceId}/delete`);
+  await api.delete(`/invoice/${invoiceId}`);
 }

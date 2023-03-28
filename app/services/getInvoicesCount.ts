@@ -5,6 +5,6 @@ type Response = {
 };
 
 export default async function getInvoicesCount(): Promise<Response> {
-  const res = await api.get("/getInvoicesCount");
+  const res = await api.get("/get-invoices-count");
   return res.data;
 }

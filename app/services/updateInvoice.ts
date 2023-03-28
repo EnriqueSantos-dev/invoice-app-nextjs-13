@@ -9,7 +9,7 @@ export default async function updateInvoice({
   invoiceId,
   invoice,
 }: UpdateInvoiceProps): Promise<void> {
-  await api.patch(`/invoice/${invoiceId}/update`, {
+  await api.put(`/invoice/${invoiceId}`, {
     invoice,
   });
 }

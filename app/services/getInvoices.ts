@@ -13,7 +13,7 @@ export type GetInvoicesResponse = {
 export default async function getInvoices({
   cursor,
 }: GetInvoicesProps): Promise<GetInvoicesResponse> {
-  const res = await api.get("/invoices", {
+  const res = await api.get("/get-invoices", {
     params: { cursor },
   });
   const data = res.data;
