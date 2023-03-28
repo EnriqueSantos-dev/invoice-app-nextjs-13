@@ -1,17 +1,23 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";
-import { useSearchParams } from "next/navigation";
-import { Status } from "@/app/types";
-import Invoice from "@/app/components/Invoice";
 import IllustrationNothingInvoices from "@/app/assets/illustration-empty.svg";
+import Invoice from "@/app/components/Invoice";
 import getInvoices from "@/app/services/getInvoices";
+import { Status } from "@/app/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { useInView } from "react-intersection-observer";
+
+const MapperFilters = {
+  paid: Status.PAID,
+  pending: Status.PENDING,
+  draft: Status.DRAFT,
+};
 
 export default function ControllerListInvoices() {
   const searchParams = useSearchParams();
-  const filter = searchParams.get("filter");
+  const filter = searchParams?.get("filter");
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -28,16 +34,11 @@ export default function ControllerListInvoices() {
   const filterData = useMemo(() => {
     return data?.pages.map((page) =>
       page.invoices?.filter((invoice) => {
-        if (filter === "paid") {
-          return invoice.status === Status.PAID;
-        }
-        if (filter === "pending") {
-          return invoice.status === Status.PENDING;
-        }
-        if (filter === "draft") {
-          return invoice.status === Status.DRAFT;
-        }
-        return invoice;
+        if (!filter || !(filter in MapperFilters)) return true;
+
+        return (
+          invoice.status === MapperFilters[filter as keyof typeof MapperFilters]
+        );
       })
     );
   }, [filter, data]);
