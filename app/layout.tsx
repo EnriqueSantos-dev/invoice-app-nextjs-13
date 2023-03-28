@@ -10,6 +10,23 @@ const roboto = League_Spartan({
   subsets: ["latin"],
 });
 
+export const metadata = {
+  title: "Invoice | App",
+  description: "Invoice App. Challenge from frontend mentor",
+  authors: [
+    {
+      name: "Enrique Santos",
+      url: "https://github.com/enriquesantos-dev",
+    },
+  ],
+  icons: [
+    {
+      rel: "icon",
+      url: "/assets/favicon.png",
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {

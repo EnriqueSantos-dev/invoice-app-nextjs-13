@@ -7,6 +7,17 @@ import { Suspense } from "react";
 import ControllerListInvoices from "./components/ControllerListInvoices";
 import ErrorBoundaryFallback from "./components/ErrorBoundaryInvoices";
 
+export const metadata = {
+  title: "Invoice | Home",
+  description: "Invoice App. Challenge from frontend mentor",
+  authors: [
+    {
+      name: "Enrique Santos",
+      url: "https://github.com/enriquesantos-dev",
+    },
+  ],
+};
+
 async function getData() {
   const session = await unstable_getServerSession(authOptions);
   const data = await dbGetInvoicesCount({ userId: session?.user.id! });
