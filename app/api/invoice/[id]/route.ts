@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import dbGetInvoiceById from "@/app/lib/prisma/db-get-invoice-by-id";
 import { Status } from "@/app/types";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth";
 import { z } from "zod";
 
 interface Params {
@@ -12,16 +10,9 @@ interface Params {
 }
 
 export async function GET(req: Request, { params }: Params): Promise<Response> {
-  const session = await unstable_getServerSession(authOptions);
-
   const schema = z.object({
     id: z.string().uuid(),
   });
-
-  if (!session)
-    return new Response(JSON.stringify({ message: "Unauthorized" }), {
-      status: 401,
-    });
 
   try {
     const { id: invoiceId } = schema.parse({ id: params.id });
@@ -45,18 +36,12 @@ export async function PATCH(
   req: Request,
   { params }: Params
 ): Promise<Response> {
-  const session = await unstable_getServerSession(authOptions);
   const body = await req.json();
 
   const schema = z.object({
     id: z.string().uuid(),
     status: z.nativeEnum(Status),
   });
-
-  if (!session)
-    return new Response(JSON.stringify({ message: "Unauthorized" }), {
-      status: 401,
-    });
 
   try {
     const { status, id } = schema.parse({ ...body, id: params.id });
@@ -121,13 +106,7 @@ const schema = z.object({
 });
 
 export async function PUT(req: Request, { params }: Params): Promise<Response> {
-  const session = await unstable_getServerSession(authOptions);
   const body = await req.json();
-
-  if (!session)
-    return new Response(JSON.stringify({ message: "Unauthorized" }), {
-      status: 401,
-    });
 
   try {
     const { id, invoice: rawInvoice } = schema.parse({
@@ -199,13 +178,6 @@ export async function DELETE(
   req: Request,
   { params }: Params
 ): Promise<Response> {
-  const session = await unstable_getServerSession(authOptions);
-
-  if (!session)
-    return new Response(JSON.stringify({ message: "Unauthorized" }), {
-      status: 401,
-    });
-
   try {
     await prisma.invoice.delete({
       where: {

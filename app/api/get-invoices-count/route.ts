@@ -1,11 +1,9 @@
 import dbGetInvoicesCount from "@/app/lib/prisma/db-get-invoices-count";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export async function GET() {
-  const session = await unstable_getServerSession(authOptions);
-
-  if (!session) return new Response("Unauthorized", { status: 401 });
+  const session = await getServerSession(authOptions);
 
   try {
     const count = await dbGetInvoicesCount({ userId: session?.user.id! });

@@ -1,7 +1,7 @@
 import z from "zod";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 
 const schema = z.object({
   invoice: z.object({
@@ -39,13 +39,8 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  const session = await unstable_getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   const body = await req.json();
-
-  if (!session)
-    return new Response(JSON.stringify({ message: "Unauthorized" }), {
-      status: 401,
-    });
 
   try {
     const { invoice: rawInvoice } = schema.parse({
@@ -58,7 +53,7 @@ export async function POST(req: Request) {
       data: {
         user: {
           connect: {
-            id: session.user.id!,
+            id: session?.user.id,
           },
         },
         shortId: rawInvoice.shortId,

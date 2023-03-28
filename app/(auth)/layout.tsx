@@ -1,22 +1,15 @@
 import Header from "@/app/components/Header";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 export const fetchCache = "force-no-store";
-
-async function getUserHasSession() {
-  const session = await unstable_getServerSession(authOptions);
-  if (!session) redirect("/login");
-  return session;
-}
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getUserHasSession();
+  const session = await unstable_getServerSession(authOptions);
 
   return (
     <>
