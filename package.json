@@ -7,7 +7,7 @@
     "build": "npm run prisma:deploy && next build",
     "start": "npm run prisma:generate && next start",
     "lint": "next lint",
-    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:deploy": "npx prisma db push",
     "prisma:generate": "npx prisma generate",
     "docker:up": "docker compose up -d",
     "docker:down": "docker-compose down",
