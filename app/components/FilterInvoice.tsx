@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import { StatusInvoice } from "@/app/types";
@@ -14,10 +14,9 @@ type FilterInvoiceProps = {
 export default function FilterInvoice({ options }: FilterInvoiceProps) {
   const route = useRouter();
   const searchParams = useSearchParams();
-  const isMounted = useRef<boolean>(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [filterActive, setFilterActive] = useState<StatusInvoice | null>(
-    (searchParams.get("filter")?.toLocaleUpperCase() as StatusInvoice) ?? null
+    (searchParams!.get("filter")?.toUpperCase() as StatusInvoice) ?? null
   );
 
   function handleChangeFilter(filter: StatusInvoice) {
@@ -26,25 +25,21 @@ export default function FilterInvoice({ options }: FilterInvoiceProps) {
   }
 
   useEffect(() => {
-    isMounted.current = true;
-    if (filterActive && isMounted.current) {
-      const searchParams = new URLSearchParams({
-        filter: filterActive.toLocaleLowerCase(),
-      });
+    const urlSearchParams = new URLSearchParams();
 
-      route.push(`/?${searchParams}`);
-      return;
+    if (filterActive) {
+      urlSearchParams.append("filter", filterActive.toLowerCase());
+      return route.push(`/?${urlSearchParams}`);
     }
 
-    if (!filterActive && isMounted.current) {
-      route.push("/");
-    }
-  }, [filterActive]);
+    urlSearchParams.delete("filter");
+    return route.push(`/?${urlSearchParams}`);
+  }, [filterActive, route]);
 
   return (
     <div
       className={clsx(
-        "relative w-full max-w-[158px]  text-black transition-all dark:text-white",
+        "relative w-full max-w-[158px] text-black transition-all dark:text-white",
         {
           "h-10 overflow-hidden": !menuIsExpanded,
           "h-full max-h-fit overflow-visible": menuIsExpanded,
@@ -91,6 +86,7 @@ export default function FilterInvoice({ options }: FilterInvoiceProps) {
 
 interface StatusFilterCheckboxProps {
   status: StatusInvoice;
+  // eslint-disable-next-line no-unused-vars
   changeFilter: (filterName: StatusInvoice) => void;
   isChecked: boolean;
 }
