@@ -4,7 +4,9 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  const invoices = await dbGetInvoices({ userId: session?.user.id! });
+  const userId = session?.user?.id as string;
+
+  const invoices = await dbGetInvoices({ userId });
 
   return new Response(JSON.stringify(invoices));
 }

@@ -1,14 +1,19 @@
 import dbGetInvoiceById from "@/lib/prisma/db-get-invoice-by-id";
 import Controller from "../components/Controller";
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 type PageProps = {
   params: { id: string };
 };
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
   const id = params.id;
-  const invoice = await dbGetInvoiceById({ invoiceId: id });
+
+  const invoice = await dbGetInvoiceById({ invoiceId: id, userId });
 
   return {
     title: `Invoice | #${invoice?.shortId.toUpperCase()}`,
@@ -17,7 +22,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 }
 
 async function getData(id: string) {
-  const invoice = await dbGetInvoiceById({ invoiceId: id });
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
+  const invoice = await dbGetInvoiceById({ invoiceId: id, userId });
 
   if (!invoice) notFound();
 

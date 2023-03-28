@@ -1,6 +1,6 @@
 import Header from "@/app/components/Header";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 
 export const fetchCache = "force-no-store";
 
@@ -9,7 +9,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await unstable_getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   return (
     <>

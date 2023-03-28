@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import dbGetInvoiceById from "@/app/lib/prisma/db-get-invoice-by-id";
 import { Status } from "@/app/types";
 import { z } from "zod";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 interface Params {
   params: {
@@ -9,14 +11,19 @@ interface Params {
   };
 }
 
+// userId ever present in session, because of auth middleware
+
 export async function GET(req: Request, { params }: Params): Promise<Response> {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
   const schema = z.object({
     id: z.string().uuid(),
   });
 
   try {
     const { id: invoiceId } = schema.parse({ id: params.id });
-    const invoice = await dbGetInvoiceById({ invoiceId });
+    const invoice = await dbGetInvoiceById({ invoiceId, userId });
 
     return new Response(JSON.stringify(invoice));
   } catch (error) {
@@ -36,6 +43,9 @@ export async function PATCH(
   req: Request,
   { params }: Params
 ): Promise<Response> {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
   const body = await req.json();
 
   const schema = z.object({
@@ -48,7 +58,10 @@ export async function PATCH(
 
     await prisma.invoice.update({
       where: {
-        id,
+        userId_id: {
+          id,
+          userId,
+        },
       },
       data: {
         status: status,
@@ -106,6 +119,9 @@ const schema = z.object({
 });
 
 export async function PUT(req: Request, { params }: Params): Promise<Response> {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
   const body = await req.json();
 
   try {
@@ -117,7 +133,7 @@ export async function PUT(req: Request, { params }: Params): Promise<Response> {
     const { email, name, ...restRawCustomer } = rawInvoice.customer;
 
     await prisma.invoice.update({
-      where: { id },
+      where: { userId_id: { id, userId } },
       data: {
         description: rawInvoice.description,
         paymentDate: rawInvoice.paymentDate,
@@ -178,10 +194,16 @@ export async function DELETE(
   req: Request,
   { params }: Params
 ): Promise<Response> {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
   try {
     await prisma.invoice.delete({
       where: {
-        id: params.id,
+        userId_id: {
+          id: params.id,
+          userId,
+        },
       },
     });
 

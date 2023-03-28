@@ -94,6 +94,7 @@ model Invoice {
   user         User           @relation(fields: [userId], references: [id])
   ownerAddress Address        @relation(fields: [addressId], references: [id])
 
+  @@unique([userId, id])
   @@map("invoices")
 }
 

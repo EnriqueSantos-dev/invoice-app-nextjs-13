@@ -2,7 +2,7 @@ import ActiveBar from "@/app/components/ActiveBar";
 import InvoiceItemSkeleton from "@/app/components/InvoiceSkeleton";
 import dbGetInvoicesCount from "@/lib/prisma/db-get-invoices-count";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { unstable_getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 import ControllerListInvoices from "./components/ControllerListInvoices";
 import ErrorBoundaryFallback from "./components/ErrorBoundaryInvoices";
@@ -19,7 +19,7 @@ export const metadata = {
 };
 
 async function getData() {
-  const session = await unstable_getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   const data = await dbGetInvoicesCount({ userId: session?.user.id! });
   return data;
 }

@@ -1,7 +1,7 @@
 import z from "zod";
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 const schema = z.object({
   invoice: z.object({
@@ -40,6 +40,8 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
+  const userId = session?.user?.id as string;
+
   const body = await req.json();
 
   try {
@@ -53,7 +55,7 @@ export async function POST(req: Request) {
       data: {
         user: {
           connect: {
-            id: session?.user.id,
+            id: userId,
           },
         },
         shortId: rawInvoice.shortId,
