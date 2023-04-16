@@ -1,4 +1,4 @@
-export default function getPaymentDateFormatted(date: Date | string) {
+export function getPaymentDateFormatted(date: Date | string) {
   const options: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "short",

@@ -1,6 +1,6 @@
 import { StatusInvoice, Status } from "@/app/types";
 
-export default function getStatusInvoiceNameFormatted(status: StatusInvoice) {
+export function getStatusInvoiceNameFormatted(status: StatusInvoice) {
   if (status === Status.DRAFT) {
     return "draft";
   }

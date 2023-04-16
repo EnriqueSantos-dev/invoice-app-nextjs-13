@@ -5,7 +5,7 @@ type RemoveIdItems = {
   items: InvoiceItemPlusIdRandom[];
 };
 
-export default function removeIdItems({ status, items }: RemoveIdItems) {
+export function removeIdItems({ status, items }: RemoveIdItems) {
   if (status === "DRAFT" || status === "PENDING") {
     return items.map((i) => ({
       name: i.name,

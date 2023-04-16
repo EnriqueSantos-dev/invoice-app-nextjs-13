@@ -12,7 +12,7 @@ type MapperValuesFormToPersistenceProps = {
   status: StatusInvoice;
 };
 
-export default function mapperValuesFormToPersistence({
+export function mapperValuesFormToPersistence({
   values,
   status,
 }: MapperValuesFormToPersistenceProps) {
