@@ -5,7 +5,7 @@ import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { MdError } from "react-icons/md";
 
-export default function ErrorBoundary<T>({
+export default function ErrorBoundary({
   children,
 }: {
   children: React.ReactNode;

@@ -34,6 +34,7 @@ export function mapperValuesFormToPersistence({
     },
     description: values.description,
     items: values.items.map((item) => {
+      // eslint-disable-next-line no-unused-vars
       const { uuid, ...rest } = item;
       return rest;
     }),

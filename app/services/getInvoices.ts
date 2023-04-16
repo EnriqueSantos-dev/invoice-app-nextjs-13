@@ -1,4 +1,4 @@
-import { Invoice, StatusInvoice } from "@/app/types";
+import { Invoice } from "@/app/types";
 import api from "@/lib/axios";
 
 type GetInvoicesProps = {
