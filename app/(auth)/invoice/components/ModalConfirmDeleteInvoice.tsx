@@ -1,54 +1,33 @@
 "use client";
 
-import React from "react";
-import clsx from "clsx";
-import Portal from "@/app/components/Portal";
-import useModal from "@/app/hooks/useModal";
+import * as Dialog from "@radix-ui/react-dialog";
 
 type ModalConfirmDeleteInvoiceProps = {
   shortId: string;
   isOpen: boolean;
-  onClose: () => void;
-  onClick: (params: any) => any;
+  isDeleteLoading?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  handleDeleteInvoice: (...args: any) => any;
 };
 
-export default function ModalConfirmDeleteInvoice({
+export function ModalConfirmDeleteInvoice({
   shortId,
-  isOpen,
-  onClick,
-  onClose,
+  handleDeleteInvoice,
+  isDeleteLoading = false,
 }: ModalConfirmDeleteInvoiceProps) {
-  const overlayRef = React.useRef<HTMLDivElement | null>(null);
-
-  useModal({
-    refToCloseModalOnClick: overlayRef,
-    onClose,
-    isOpen,
-    blockingScrollingPage: true,
-  });
-
   return (
-    <Portal>
-      <div
-        ref={overlayRef}
-        className={clsx(
-          "inset fixed z-50 h-screen w-screen bg-overlay transition-all duration-150",
-          {
-            "invisible opacity-0": !isOpen,
-            "pointer-events-auto visible opacity-100": isOpen,
-          }
-        )}
+    <Dialog.Root>
+      <Dialog.Trigger
+        type="button"
+        title="delete invoice"
+        className="h-12 rounded-3xl bg-burntSienna px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:opacity-80"
       >
-        <div
-          role="dialog"
-          className={clsx(
-            "duration-250 absolute bottom-0 left-0 sm:left-1/2 sm:top-1/2 w-full origin-bottom sm:origin-center sm:-translate-x-1/2 sm:-translate-y-1/2 overflow-hidden rounded-t-lg sm:rounded-lg bg-offWhite px-8 py-12 sm:p-12 transition-transform duration-300 dark:bg-mirage sm:max-w-md sm:bottom-auto",
-            {
-              "scale-0": !isOpen,
-              "scale-100": isOpen,
-            }
-          )}
-        >
+        delete
+      </Dialog.Trigger>
+      <Dialog.DialogPortal>
+        <Dialog.Overlay className="inset-0 fixed bg-overlay transition-all duration-150 data-[state=open]:animate-fade-in backdrop-blur-sm" />
+
+        <Dialog.Content className="fixed duration-250 z-10 bottom-0 left-0 sm:left-1/2 sm:top-1/2 w-full sm:-translate-x-1/2 sm:origin-center sm:-translate-y-1/2 rounded-t-lg sm:rounded-lg bg-offWhite px-8 py-12 sm:p-12 transition-transform duration-300 dark:bg-mirage sm:max-w-md data-[state=open]:animate-fade-in sm:bottom-auto sm:shadow-sm">
           <h1 className="mb-5 text-3xl font-bold text-black dark:text-white">
             Confirm Deletion
           </h1>
@@ -59,25 +38,25 @@ export default function ModalConfirmDeleteInvoice({
           </p>
 
           <div className="flex w-full items-center justify-end gap-3">
-            <button
+            <Dialog.Close
               type="button"
               title="close modal delete invoice"
               className="h-12 rounded-3xl bg-slate-100 px-6 text-xs font-bold text-shipCove transition-all first-letter:capitalize hover:bg-selago dark:bg-ebony dark:hover:opacity-90"
-              onClick={onClose}
             >
               cancel
-            </button>
+            </Dialog.Close>
             <button
               type="button"
               title="button confirm delete invoice"
-              className="h-12 rounded-3xl bg-burntSienna px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:opacity-80"
-              onClick={onClick}
+              className="h-12 rounded-3xl bg-burntSienna px-6 text-xs font-bold text-white transition-opacity first-letter:capitalize hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleDeleteInvoice}
+              disabled={isDeleteLoading}
             >
               delete
             </button>
           </div>
-        </div>
-      </div>
-    </Portal>
+        </Dialog.Content>
+      </Dialog.DialogPortal>
+    </Dialog.Root>
   );
 }
