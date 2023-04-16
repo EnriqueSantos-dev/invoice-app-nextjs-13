@@ -1,8 +1,8 @@
-import { AuthButtons } from "@/app/components/AuthButtons";
-import Logo from "@/app/components/Logo";
+import { AuthButtons, Logo } from "@/app/components";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Invoice | Login",
+export const metadata: Metadata = {
+  title: "Login",
   description: "Login page for used invoice app",
 };
 

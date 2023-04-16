@@ -1,14 +1,15 @@
-import ActiveBar from "@/app/components/ActiveBar";
-import InvoiceItemSkeleton from "@/app/components/InvoiceSkeleton";
+import { InvoiceItemSkeleton } from "@/app/components/InvoiceSkeleton";
+import { ActiveBar } from "@/app/components";
 import dbGetInvoicesCount from "@/lib/prisma/db-get-invoices-count";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 import ControllerListInvoices from "./components/ControllerListInvoices";
 import ErrorBoundaryFallback from "./components/ErrorBoundaryInvoices";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Invoice | Home",
+export const metadata: Metadata = {
+  title: "Home",
   description: "Invoice App. Challenge from frontend mentor",
   authors: [
     {

@@ -1,8 +1,9 @@
 import "@/app/styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import Providers from "./components/Providers";
+import { Providers } from "@/app/components";
 import { League_Spartan } from "next/font/google";
+import { Metadata } from "next";
 
 const leagueSpartan = League_Spartan({
   weight: ["400", "500", "700"],
@@ -10,8 +11,11 @@ const leagueSpartan = League_Spartan({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Invoice | App",
+export const metadata: Metadata = {
+  title: {
+    default: "Invoice App",
+    template: "Invoice | %s",
+  },
   description: "Invoice App. Challenge from frontend mentor",
   authors: [
     {

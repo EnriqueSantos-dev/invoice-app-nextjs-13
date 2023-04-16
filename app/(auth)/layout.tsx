@@ -1,4 +1,4 @@
-import Header from "@/app/components/Header";
+import { Header } from "@/app/components/Header";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 
@@ -13,7 +13,6 @@ export default async function Layout({
 
   return (
     <>
-      <div id="portal" />
       <Header session={session} />
       <main className="min-h-screen w-full bg-offWhite pt-[72px] transition-colors duration-300 dark:bg-mirage2 md:pb-0 lg:pl-[90px] lg:pt-0">
         {children}
