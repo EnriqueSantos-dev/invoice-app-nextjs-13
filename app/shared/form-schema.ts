@@ -28,6 +28,13 @@ const formSchema = z.object({
     .min(1, { message: "cannot be empty" })
     .transform((value) => new Date(value)),
   description: z.string().min(1, { message: "cannot be empty" }),
+  items: z.array(
+    z.object({
+      name: z.string({ required_error: "cannot be empty" }),
+      quantity: z.coerce.number().nonnegative({ message: "cannot negative" }),
+      price: z.coerce.number().nonnegative({ message: "cannot negative" }),
+    })
+  ),
 });
 
 export default formSchema;
