@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import { StatusInvoice, Status } from "@/app/types";
-import getStatusInvoiceNameFormatted from "@/app/utils/get-status-invoice-name-formatted";
+import { getStatusInvoiceNameFormatted } from "@/app/utils";
 
 interface StatusInvoiceItemProps {
   status: StatusInvoice;
   isLoadingStatus?: boolean;
 }
 
-export default function StatusInvoiceItem({
+export function StatusInvoiceItem({
   status,
   isLoadingStatus,
 }: StatusInvoiceItemProps) {

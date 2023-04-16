@@ -1,7 +1,6 @@
 import { Invoice } from "@/app/types";
-import StatusInvoiceItem from "./StatusInvoiceItem";
-import { formatPrice } from "@/app/utils/format-price";
-import getPaymentDateFormatted from "@/app/utils/get-payment-date-formatted";
+import { StatusInvoiceItem } from "@/app/components/StatusInvoiceItem";
+import { getPaymentDateFormatted, formatPrice } from "@/app/utils";
 import Link from "next/link";
 import { BiChevronRight } from "react-icons/bi";
 
@@ -9,7 +8,7 @@ type InvoiceItemProps = {
   invoice: Invoice;
 };
 
-export default function InvoiceItem({ invoice }: InvoiceItemProps) {
+export function InvoiceItem({ invoice }: InvoiceItemProps) {
   const { id, customer, status, paymentDate, items } = invoice;
   const dateFormatted = getPaymentDateFormatted(paymentDate);
   const totalAmount = items.reduce(
@@ -20,7 +19,7 @@ export default function InvoiceItem({ invoice }: InvoiceItemProps) {
 
   return (
     <Link
-      href={`/invoice/${invoice.id}`}
+      href={`/invoice/${id}`}
       className="flex active:border-purple w-full cursor-pointer flex-col gap-4 rounded-lg border border-white bg-white p-4 text-shipCove outline-none ring-1 ring-transparent transition-colors duration-150 focus:ring-purple hover:border-purple dark:focus:hover:border-ebony dark:border-ebony dark:bg-ebony dark:text-white dark:hover:border-purple md:flex-row md:justify-between md:py-6"
     >
       <div className="flex items-center justify-between md:justify-start md:gap-6">

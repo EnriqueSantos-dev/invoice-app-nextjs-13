@@ -1,4 +1,4 @@
-export default function Logo() {
+export function Logo() {
   return (
     <div className="group relative flex h-full w-full items-center justify-center overflow-hidden bg-purple after:absolute after:bottom-0 after:h-1/2 after:w-full after:rounded-tl-3xl after:bg-heliotrope after:transition-all after:duration-200 hover:after:h-4/5">
       <svg

@@ -1,12 +1,11 @@
-import { InvoiceItemSkeleton } from "@/app/components/InvoiceSkeleton";
-import { ActiveBar } from "@/app/components";
+import { ActiveBar, InvoiceItemSkeleton } from "@/app/components";
 import dbGetInvoicesCount from "@/lib/prisma/db-get-invoices-count";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Suspense } from "react";
 import ControllerListInvoices from "./components/ControllerListInvoices";
 import ErrorBoundaryFallback from "./components/ErrorBoundaryInvoices";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Home",

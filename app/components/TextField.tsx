@@ -4,7 +4,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: React.HTMLInputTypeAttribute;
 }
 
-const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
+export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   ({ ...rest }, ref) => {
     return (
       <input
@@ -17,5 +17,3 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 TextField.displayName = "TextField";
-
-export default TextField;

@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 import { BsFillSunFill, BsFillMoonFill } from "react-icons/bs";
-import useToggleTheme from "../hooks/useToggleTheme";
+import useToggleTheme from "@/app/hooks/useToggleTheme";
 
-export default function ToggleThemeButton() {
+export function ToggleThemeButton() {
   const { theme, toggleTheme } = useToggleTheme();
 
   const IconShow = useMemo(

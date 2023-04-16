@@ -1,12 +1,11 @@
 import { InvoiceItem } from "@/app/types";
-import calculateTotalPriceItem from "@/app/utils/calculate-total-price-item";
-import { formatPrice } from "@/app/utils/format-price";
+import { calculateTotalPriceItem, formatPrice } from "@/app/utils";
 
 type Props = {
   items: InvoiceItem[];
 };
 
-export default function TableItems({ items }: Props) {
+export function TableItems({ items }: Props) {
   return (
     <div
       className="max-h-60 overflow-auto

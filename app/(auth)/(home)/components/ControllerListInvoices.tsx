@@ -1,7 +1,7 @@
 "use client";
 
 import IllustrationNothingInvoices from "@/app/assets/illustration-empty.svg";
-import Invoice from "@/app/components/Invoice";
+import { InvoiceItem } from "@/app/components";
 import getInvoices from "@/app/services/getInvoices";
 import { Status } from "@/app/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -62,7 +62,7 @@ export default function ControllerListInvoices() {
       <>
         {filterData?.map((invoices) => {
           return invoices.map((invoice) => (
-            <Invoice key={invoice.id} invoice={invoice} />
+            <InvoiceItem key={invoice.id} invoice={invoice} />
           ));
         })}
 

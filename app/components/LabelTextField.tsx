@@ -1,3 +1,5 @@
+import React from "react";
+
 type LabelTextFieldProps = {
   errorMessage?: string;
   children: React.ReactNode;
@@ -5,7 +7,7 @@ type LabelTextFieldProps = {
   isRequiredField?: boolean;
 };
 
-export default function LabelTextField({
+export function LabelTextField({
   errorMessage,
   label,
   isRequiredField = false,

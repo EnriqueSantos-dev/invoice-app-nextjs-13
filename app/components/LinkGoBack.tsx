@@ -3,7 +3,7 @@ import { BiChevronLeft } from "react-icons/bi";
 
 interface LinkGoBackProps extends LinkProps {}
 
-export default function LinkGoBack(props: LinkGoBackProps) {
+export function LinkGoBack(props: LinkGoBackProps) {
   return (
     <Link
       className="flex items-center gap-3 text-sm font-bold text-black dark:text-white md:text-base"

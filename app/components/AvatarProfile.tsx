@@ -9,7 +9,7 @@ type AvatarProfileProps = {
   imageUrl?: string;
 };
 
-export default function AvatarProfile({ imageUrl }: AvatarProfileProps) {
+export function AvatarProfile({ imageUrl }: AvatarProfileProps) {
   const [tooltipExpanded, setTooltipExpanded] = useState(false);
 
   function handleSignOut() {

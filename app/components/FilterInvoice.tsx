@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import clsx from "clsx";
 import { StatusInvoice } from "@/app/types";
-import getStatusInvoiceNameFormatted from "@/app/utils/get-status-invoice-name-formatted";
-import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { getStatusInvoiceNameFormatted } from "@/app/utils";
+import * as Popover from "@radix-ui/react-popover";
+import clsx from "clsx";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { BiChevronDown } from "react-icons/bi";
 
 type FilterInvoiceProps = {
   options: StatusInvoice[];
 };
 
-export default function FilterInvoice({ options }: FilterInvoiceProps) {
+export function FilterInvoice({ options }: FilterInvoiceProps) {
   const route = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [filterActive, setFilterActive] = useState<StatusInvoice | null>(
     (searchParams!.get("filter")?.toUpperCase() as StatusInvoice) ?? null
@@ -29,58 +31,53 @@ export default function FilterInvoice({ options }: FilterInvoiceProps) {
 
     if (filterActive) {
       urlSearchParams.append("filter", filterActive.toLowerCase());
-      return route.push(`/?${urlSearchParams}`);
+      route.push(`/?${urlSearchParams}`);
+      return;
     }
 
     urlSearchParams.delete("filter");
-    return route.push(`/?${urlSearchParams}`);
+    route.push(`/?${urlSearchParams}`);
   }, [filterActive, route]);
 
+  console.log(pathname);
+
   return (
-    <div
-      className={clsx(
-        "relative w-full max-w-[158px] text-black transition-all dark:text-white",
-        {
-          "h-10 overflow-hidden": !menuIsExpanded,
-          "h-full max-h-fit overflow-visible": menuIsExpanded,
-        }
-      )}
+    <Popover.Root
+      open={menuIsExpanded}
+      onOpenChange={() => setMenuIsExpanded((prev) => !prev)}
     >
-      <button
+      <Popover.Trigger
         type="button"
         title="toggle popup modal filters"
-        className="flex w-fit items-center justify-end gap-2 whitespace-nowrap px-3 py-2 text-base font-bold text-black dark:text-white"
-        onClick={() => setMenuIsExpanded((prev) => !prev)}
+        className="flex w-fit items-center justify-end gap-2 whitespace-nowrap px-3 py-2 text-base font-bold text-black dark:text-white group"
       >
         filter <span className="hidden md:inline-block">by status</span>
-        {menuIsExpanded ? (
-          <BiChevronUp className="h-5 w-5 fill-purple font-bold" />
-        ) : (
-          <BiChevronDown className="h-5 w-5 fill-purple font-bold" />
-        )}
-      </button>
+        <BiChevronDown className="h-5 w-5 fill-purple font-bold transition-transform group-data-[state=open]:rotate-180" />
+      </Popover.Trigger>
 
-      <div
-        className={clsx(
-          "absolute  right-0 top-12 z-10 w-[calc(100%+80px)] origin-[top_center] rounded-md bg-white py-4 pl-6 pr-4 shadow-md transition-all duration-200 dark:bg-ebony md:w-[calc(100%+50px)]",
-          {
-            "invisible scale-0 opacity-0": !menuIsExpanded,
-            "visible scale-100 opacity-100": menuIsExpanded,
-          }
-        )}
-      >
-        <ul>
-          {options.map((status) => (
-            <StatusFilterCheckbox
-              key={getStatusInvoiceNameFormatted(status)}
-              status={status}
-              changeFilter={handleChangeFilter}
-              isChecked={status === filterActive}
-            />
-          ))}
-        </ul>
-      </div>
-    </div>
+      <Popover.Portal>
+        <Popover.Content
+          className={clsx(
+            "top-12 w-[calc(100%+80px)] origin-[top_center] rounded-md bg-white py-4 pl-6 pr-4 shadow-md transition-all duration-200 dark:bg-ebony md:w-[calc(100%+50px)] data-[state=open]:animate-fade-in data-[state=open]:animate-scale",
+            {
+              "invisible scale-0 opacity-0": !menuIsExpanded,
+              "visible scale-100 opacity-100": menuIsExpanded,
+            }
+          )}
+        >
+          <ul>
+            {options.map((status) => (
+              <StatusFilterCheckbox
+                key={getStatusInvoiceNameFormatted(status)}
+                status={status}
+                changeFilter={handleChangeFilter}
+                isChecked={status === filterActive}
+              />
+            ))}
+          </ul>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
 

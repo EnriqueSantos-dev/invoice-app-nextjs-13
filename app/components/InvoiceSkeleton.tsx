@@ -2,7 +2,7 @@
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
-export default function InvoiceItemSkeleton() {
+export function InvoiceItemSkeleton() {
   return (
     <div className="flex min-h-[86px] w-full flex-col gap-4 rounded-lg border border-white bg-white p-4 outline-none ring-1 ring-transparent transition-colors duration-150 dark:border-ebony dark:bg-ebony md:flex-row md:justify-between md:py-6">
       <SkeletonTheme baseColor="#ccc" highlightColor="#999">

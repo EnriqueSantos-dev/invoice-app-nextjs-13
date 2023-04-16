@@ -1,20 +1,15 @@
 "use client";
 
-import React from "react";
-import FilterInvoice from "./FilterInvoice";
+import { FormCreateOrEditInvoice, FilterInvoice } from "@/app/components";
 import { Status } from "@/app/types";
-import { BsPlus } from "react-icons/bs";
-import FormInvoice from "./form-invoice/FormInvoice";
-import { useFormActions } from "@/app/stores/form-store";
 import { useQuery } from "@tanstack/react-query";
-import getInvoicesCount from "../services/getInvoicesCount";
+import getInvoicesCount from "@/app/services/getInvoicesCount";
 
 type ActiveBarProps = {
   count: number;
 };
 
-export default function ActiveBar({ count }: ActiveBarProps) {
-  const { open } = useFormActions();
+export function ActiveBar({ count }: ActiveBarProps) {
   const { data } = useQuery({
     queryKey: ["getInvoicesCount"],
     queryFn: () => getInvoicesCount(),
@@ -23,7 +18,6 @@ export default function ActiveBar({ count }: ActiveBarProps) {
 
   return (
     <>
-      <FormInvoice />
       <div className="flex items-center justify-between px-1">
         <div>
           <h1 className="text-3xl font-bold text-black dark:text-white md:mb-3 xl:text-4xl">
@@ -41,17 +35,7 @@ export default function ActiveBar({ count }: ActiveBarProps) {
           <FilterInvoice
             options={[Status.DRAFT, Status.PENDING, Status.PAID]}
           />
-          <button
-            type="button"
-            title="create new invoice button"
-            className="flex h-12 items-center justify-center gap-3 rounded-3xl bg-purple pl-2 pr-4 text-base font-bold text-white transition-colors duration-200 hover:bg-heliotrope"
-            onClick={() => open()}
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-              <BsPlus className="h-5 w-5 fill-purple stroke-purple stroke-[0.8]" />
-            </span>
-            New <span className="hidden md:inline-block">invoice</span>
-          </button>
+          <FormCreateOrEditInvoice />
         </div>
       </div>
     </>

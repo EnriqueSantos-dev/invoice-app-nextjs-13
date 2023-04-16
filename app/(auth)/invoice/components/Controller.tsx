@@ -1,21 +1,23 @@
 "use client";
 
-import LinkGoBack from "@/app/components/LinkGoBack";
-import StatusInvoiceItem from "@/app/components/StatusInvoiceItem";
+import { LinkGoBack } from "@/app/components/LinkGoBack";
+import { StatusInvoiceItem } from "@/app/components/StatusInvoiceItem";
 import getInvoiceById from "@/app/services/getInvoiceById";
-import calculateTotalAmountDue from "@/app/utils/calculate-total-amount-due";
-import calculateTotalPriceItem from "@/app/utils/calculate-total-price-item";
-import { formatPrice } from "@/app/utils/format-price";
+import {
+  formatPrice,
+  calculateTotalPriceItem,
+  calculateTotalAmountDue,
+} from "@/app/utils";
 import { Invoice } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
-import ButtonsActions from "./ActionButtons";
-import TableItems from "./TableItems";
+import { ButtonsActions } from "./ActionButtons";
+import { TableItems } from "./TableItems";
 
 type Props = {
   initialData: Invoice;
 };
 
-export default function Controller({ initialData }: Props) {
+export function Controller({ initialData }: Props) {
   const { data, isFetching } = useQuery({
     queryKey: ["getInvoiceById"],
     queryFn: () => getInvoiceById({ invoiceId: initialData.id }),
