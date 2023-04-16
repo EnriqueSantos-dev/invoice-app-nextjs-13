@@ -1,43 +1,28 @@
 "use client";
 
-import React, { useRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useRef, useState } from "react";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import ShortUniqueId from "short-unique-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { toast } from "react-toastify";
-import LinkGoBack from "@/app/components/LinkGoBack";
-import LabelTextField from "@/app/components/LabelTextField";
-import TextField from "@/app/components/TextField";
-import {
-  FormValues,
-  Invoice,
-  InvoiceItemPlusIdRandom,
-  Status,
-} from "@/app/types";
-import Portal from "@/app/components/Portal";
-import ListItemsForm from "./components/ListItemsForm";
-import useItemForm from "@/app/hooks/useItemForm";
-import useModal from "@/app/hooks/useModal";
+import { FormValues, Invoice, Status } from "@/app/types";
 import formSchema from "@/app/shared/form-schema";
 import saveInvoice from "@/app/services/saveInvoice";
-import mapperValuesFormToPersistence from "@/app/utils/mapper-values-form-to-persistence";
-import removeIdItems from "@/app/utils/remove-id-items";
+import {
+  removeIdItems,
+  formatPrice,
+  mapperValuesFormToPersistence,
+  mapperDefaultValuesToSchemaForm,
+} from "@/app/utils";
 import { useMutation } from "@tanstack/react-query";
-import { useFormActions, useFormStoreStates } from "@/app/stores/form-store";
 import updateInvoice from "@/app/services/updateInvoice";
 import useInvalidateQueries from "@/app/hooks/useInvalidateQueries";
-
-const newArrayInvoiceFallback: InvoiceItemPlusIdRandom[] = [
-  {
-    id: 0,
-    name: "New Invoice Item",
-    price: 0,
-    quantity: 0,
-    uuid: uuid(),
-  },
-];
+import { BiPlus, BiTrash } from "react-icons/bi";
+import { BsPlus } from "react-icons/bs";
+import { LabelTextField, LinkGoBack, TextField } from "@/app/components";
 
 const fallbackDefaultValues = {
   billFromCity: "",
@@ -52,49 +37,44 @@ const fallbackDefaultValues = {
   billToStreetAddress: "",
   description: "",
   invoiceDate: new Date().toISOString().split("T")[0],
+  items: [
+    {
+      id: 0,
+      name: "New Invoice Item",
+      price: 0,
+      quantity: 0,
+      uuid: uuid(),
+    },
+  ],
 };
 
 type FormCreateNewInvoiceProps = {
   defaultValues?: Invoice;
 };
 
-export default function FormCreateNewInvoice({
+export function FormCreateOrEditInvoice({
   defaultValues,
 }: FormCreateNewInvoiceProps) {
-  let isEditing = !!defaultValues;
-  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const isEditing = !!defaultValues;
   const refButtonSaveAndSend = useRef<HTMLButtonElement | null>(null);
-  const { close: onClose } = useFormActions();
-  const isOpen = useFormStoreStates();
-  const [items, dispatch] = useItemForm(
-    defaultValues?.items.map((item) => ({ ...item, uuid: uuid() })) ??
-      newArrayInvoiceFallback
-  );
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const {
     register,
     formState: { errors },
     reset,
     handleSubmit,
+    control,
+    watch,
   } = useForm<FormValues>({
     defaultValues: defaultValues
-      ? {
-          billFromCity: defaultValues.ownerAddress.city,
-          billFromCountry: defaultValues.ownerAddress.country,
-          billFromPostCode: defaultValues.ownerAddress.zipCode,
-          billFromStreetAddress: defaultValues.ownerAddress.streetAddress,
-          billToCity: defaultValues.customer.address.city,
-          billToCountry: defaultValues.customer.address.country,
-          billToEmail: defaultValues.customer.email,
-          billToName: defaultValues.customer.name,
-          billToPostCode: defaultValues.customer.address.zipCode,
-          billToStreetAddress: defaultValues.customer.address.streetAddress,
-          description: defaultValues.description,
-          invoiceDate: new Date(defaultValues.paymentDate)
-            .toISOString()
-            .split("T")[0],
-        }
+      ? mapperDefaultValuesToSchemaForm(defaultValues)
       : fallbackDefaultValues,
     resolver: zodResolver(formSchema),
+  });
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: "items",
+    keyName: "uuid",
   });
   const { invalidate } = useInvalidateQueries();
   const createNewInvoiceMutation = useMutation({
@@ -117,9 +97,9 @@ export default function FormCreateNewInvoice({
     } else {
       invalidate(key);
     }
-    onClose();
     reset(defaultValues ? defaultValues : fallbackDefaultValues);
     toast.success(`${isEditing ? "Updated" : "Created"} invoice successfully!`);
+    setIsFormOpen(false);
   }
 
   function onErrorMutate() {
@@ -138,7 +118,7 @@ export default function FormCreateNewInvoice({
         : Status.DRAFT;
 
     // remove id generated forced for not conflicting in bd
-    const itemsRemapped = removeIdItems({ status, items });
+    const itemsRemapped = removeIdItems({ status, items: values.items });
 
     const dataToPersistence = {
       invoice: mapperValuesFormToPersistence({
@@ -158,7 +138,7 @@ export default function FormCreateNewInvoice({
           status,
           values: {
             ...values,
-            items,
+            items: values.items,
           },
         }),
       });
@@ -167,41 +147,60 @@ export default function FormCreateNewInvoice({
     }
   };
 
-  function handleDiscardProgress() {
-    onClose();
+  function getRealTimeTotalPrice(index: number) {
+    return (
+      watch(`items.${index}.quantity` as const) *
+      watch(`items.${index}.price` as const)
+    );
   }
 
-  useModal({
-    refToCloseModalOnClick: overlayRef,
-    onClose,
-    isOpen,
-  });
+  function handleAddItem() {
+    append({
+      id: 0,
+      uuid: uuid(),
+      name: "New Invoice item",
+      price: 0,
+      quantity: 0,
+    });
+  }
+
+  function handleRemoveItem(index: number) {
+    if (fields.length > 1) {
+      remove(index);
+    }
+  }
+
+  function handleCloseForm() {
+    setIsFormOpen((prev) => !prev);
+  }
 
   return (
-    <Portal>
-      <div
-        ref={overlayRef}
-        className={clsx(
-          "ease-linear origin-center fixed w-screen bg-overlay px-6 transition-all duration-300 md:h-screen md:px-0",
-          {
-            invisible: !isOpen,
-            visible: isOpen,
-          }
-        )}
-      >
-        <div
-          className={clsx(
-            "fixed left-0 bottom-0 h-full w-full overflow-y-auto bg-white p-6 pt-24 transition-transform ease-linear scrollbar scrollbar-track-selago duration-300 scrollbar-thumb-shipCove scrollbar-thumb-rounded-md scrollbar-w-3 dark:bg-mirage2 dark:scrollbar-track-mirage2 dark:scrollbar-thumb-ebony md:max-w-3xl md:pt-24 lg:max-w-4xl lg:rounded-tr-2xl lg:rounded-br-2xl lg:pt-6 lg:pl-[7.625rem] lg:pr-11",
-            {
-              "-translate-x-full": !isOpen,
-              "translate-x-0": isOpen,
-            }
-          )}
+    <Dialog.Root open={isFormOpen} onOpenChange={handleCloseForm}>
+      {!isEditing ? (
+        <Dialog.Trigger
+          title="create new invoice button"
+          className="flex h-12 items-center justify-center gap-3 rounded-3xl bg-purple pl-2 pr-4 text-base font-bold text-white transition-colors duration-200 hover:bg-heliotrope"
         >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+            <BsPlus className="h-5 w-5 fill-purple stroke-purple stroke-[0.8]" />
+          </span>
+          New <span className="hidden md:inline-block">invoice</span>
+        </Dialog.Trigger>
+      ) : (
+        <Dialog.Trigger
+          title="edit invoice button"
+          className="h-12 rounded-3xl bg-offWhite px-6 text-xs font-bold text-shipCove transition-all first-letter:capitalize hover:bg-selago dark:bg-ebony dark:hover:opacity-90"
+        >
+          edit
+        </Dialog.Trigger>
+      )}
+      <Dialog.Portal>
+        <Dialog.Overlay className="animate-fade-in fixed inset-0 bg-overlay px-6 transition-all duration-300 md:h-screen md:px-0" />
+        <Dialog.Content className="fixed left-0 bottom-0 h-full w-full overflow-y-auto bg-white p-6 pt-24 ease-linear scrollbar scrollbar-track-selago duration-300 scrollbar-thumb-shipCove scrollbar-thumb-rounded-md scrollbar-w-3 dark:bg-mirage2 dark:scrollbar-track-mirage2 dark:scrollbar-thumb-ebony md:max-w-3xl md:pt-24 lg:max-w-4xl lg:rounded-tr-2xl lg:rounded-br-2xl lg:pt-6 lg:pl-[7.625rem] lg:pr-11 data-[state=open]:translate-x-0 data-[state=closed]:-translate-x-full transition-all">
           <div className="pb-6 md:hidden">
             <LinkGoBack
               href={isEditing ? `/invoice/${defaultValues?.id}` : "/"}
-              onClick={onClose}
+              onClick={handleCloseForm}
             />
           </div>
 
@@ -341,7 +340,7 @@ export default function FormCreateNewInvoice({
                     type="date"
                     min={new Date().toISOString().split("T")[0]}
                     {...register("invoiceDate")}
-                    disabled={defaultValues ? true : false}
+                    disabled={isEditing}
                   />
                 </LabelTextField>
               </div>
@@ -357,7 +356,80 @@ export default function FormCreateNewInvoice({
               </div>
             </fieldset>
 
-            <ListItemsForm items={items} dispatch={dispatch} />
+            <div className="mt-12 mb-6">
+              <h2 className="mb-6 text-xl font-bold text-[#777f98] dark:text-white">
+                items list (optional)
+              </h2>
+
+              {fields.length > 0 && (
+                <div className="mb-10 flex flex-col gap-6 space-y-10">
+                  {fields?.map((field, i) => (
+                    <div key={field.uuid}>
+                      <LabelTextField
+                        label="item name"
+                        isRequiredField
+                        errorMessage={errors.items?.[i]?.name?.message}
+                      >
+                        <TextField
+                          type="text"
+                          {...register(`items.${i}.name` as const)}
+                        />
+                      </LabelTextField>
+
+                      <div className="mt-6 flex items-center gap-3 [&_>_label]:max-w-fit">
+                        <LabelTextField
+                          label="Qty."
+                          isRequiredField
+                          errorMessage={errors.items?.[i]?.quantity?.message}
+                        >
+                          <TextField
+                            type="number"
+                            {...register(`items.${i}.quantity` as const)}
+                          />
+                        </LabelTextField>
+
+                        <LabelTextField
+                          label="price"
+                          isRequiredField
+                          errorMessage={errors.items?.[i]?.price?.message}
+                        >
+                          <TextField
+                            type="number"
+                            {...register(`items.${i}.price` as const)}
+                          />
+                        </LabelTextField>
+
+                        <LabelTextField label="total" isRequiredField>
+                          <TextField
+                            type="text"
+                            readOnly
+                            value={formatPrice(getRealTimeTotalPrice(i))}
+                          />
+                        </LabelTextField>
+
+                        <button
+                          type="button"
+                          title="delete item for list item invoice"
+                          className="bottom-0 flex h-12 items-center justify-center self-end px-2"
+                          onClick={() => handleRemoveItem(i)}
+                        >
+                          <BiTrash className="h-5 w-5 fill-shipCove" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-[20px] bg-offWhite font-bold text-shipCove dark:bg-ebony dark:text-white"
+                onClick={handleAddItem}
+                type="button"
+              >
+                <BiPlus />
+                add new item
+              </button>
+            </div>
 
             <div
               className={clsx(
@@ -377,7 +449,7 @@ export default function FormCreateNewInvoice({
                   type="button"
                   title="button discard progress"
                   className="h-12 rounded-3xl bg-offWhite px-6 text-xs font-bold text-shipCove transition-all first-letter:capitalize hover:bg-selago dark:bg-ebony dark:text-white dark:hover:opacity-90"
-                  onClick={handleDiscardProgress}
+                  onClick={handleCloseForm}
                 >
                   discard
                 </button>
@@ -389,7 +461,7 @@ export default function FormCreateNewInvoice({
                     type="button"
                     title="button discard progress"
                     className="h-12 rounded-3xl bg-offWhite px-6 text-xs font-bold text-shipCove transition-all first-letter:capitalize hover:bg-selago dark:bg-ebony dark:text-white dark:hover:opacity-90"
-                    onClick={handleDiscardProgress}
+                    onClick={handleCloseForm}
                   >
                     discard
                   </button>
@@ -397,7 +469,8 @@ export default function FormCreateNewInvoice({
                   <button
                     type="submit"
                     title="button save invoice as draft"
-                    className="h-12 rounded-3xl bg-otherDark px-6 text-xs font-bold text-white transition-all first-letter:capitalize hover:opacity-90"
+                    className="h-12 rounded-3xl bg-otherDark px-6 text-xs font-bold text-white transition-all first-letter:capitalize hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={createNewInvoiceMutation.isLoading}
                   >
                     save as draft
                   </button>
@@ -405,16 +478,17 @@ export default function FormCreateNewInvoice({
                 <button
                   type="submit"
                   title="button save invoice as pending"
-                  className="h-12 rounded-3xl bg-purple px-6 text-xs font-bold text-white transition-all first-letter:capitalize hover:bg-heliotrope"
+                  className="h-12 rounded-3xl bg-purple px-6 text-xs font-bold text-white transition-all first-letter:capitalize hover:bg-heliotrope disabled:cursor-not-allowed disabled:opacity-50"
                   ref={refButtonSaveAndSend}
+                  disabled={createNewInvoiceMutation.isLoading}
                 >
                   save & send
                 </button>
               </div>
             </div>
           </form>
-        </div>
-      </div>
-    </Portal>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
