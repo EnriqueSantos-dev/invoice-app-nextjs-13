@@ -44,6 +44,20 @@ module.exports = {
         bgDraftStatusLight: "rgb(55 59 83 / 6%)",
         bgDraftStatusDark: "rgba(223,227,250,.0571)",
       },
+      keyframes: {
+        scale: {
+          from: { scale: 0 },
+          to: { scale: 1 },
+        },
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
+      animation: {
+        "fade-in": "fadeIn 150ms ease-in-out",
+        scale: "scale 100ms ease-in-out",
+      },
     },
   },
   plugins: [
