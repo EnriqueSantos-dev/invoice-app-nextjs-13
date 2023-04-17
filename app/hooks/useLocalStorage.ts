@@ -3,27 +3,27 @@
 import { useEffect, useState } from "react";
 
 type useLocalStorageProps = {
-  key: string;
-  initialValue?: any;
+	key: string;
+	initialValue?: any;
 };
 
 export default function useLocalStorage({
-  key,
-  initialValue,
+	key,
+	initialValue,
 }: useLocalStorageProps) {
-  const [storageValue, setStorageValue] = useState(() => {
-    try {
-      const value = localStorage.getItem(key);
+	const [storageValue, setStorageValue] = useState(() => {
+		try {
+			const value = localStorage.getItem(key);
 
-      return value ? JSON.parse(value) : initialValue;
-    } catch (error) {
-      return initialValue;
-    }
-  });
+			return value ? JSON.parse(value) : initialValue;
+		} catch (error) {
+			return initialValue;
+		}
+	});
 
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(storageValue));
-  }, [key, storageValue]);
+	useEffect(() => {
+		localStorage.setItem(key, JSON.stringify(storageValue));
+	}, [key, storageValue]);
 
-  return [storageValue, setStorageValue];
+	return [storageValue, setStorageValue];
 }

@@ -8,19 +8,19 @@ import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 
 type Props = {
-  children: React.ReactNode;
+	children: React.ReactNode;
 };
 
 export function Providers({ children }: Props) {
-  return (
-    <>
-      <ToastContainer />
-      <SessionProvider>
-        <QueryClientProvider client={queryClient}>
-          {children}
-          <ReactQueryDevtools initialIsOpen={true} />
-        </QueryClientProvider>
-      </SessionProvider>
-    </>
-  );
+	return (
+		<>
+			<ToastContainer />
+			<SessionProvider>
+				<QueryClientProvider client={queryClient}>
+					{children}
+					<ReactQueryDevtools initialIsOpen={true} />
+				</QueryClientProvider>
+			</SessionProvider>
+		</>
+	);
 }

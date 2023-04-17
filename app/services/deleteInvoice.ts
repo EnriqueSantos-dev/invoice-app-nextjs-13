@@ -1,9 +1,9 @@
 import api from "../lib/axios";
 
 export default async function deleteInvoice({
-  invoiceId,
+	invoiceId,
 }: {
-  invoiceId: string;
+	invoiceId: string;
 }): Promise<void> {
-  await api.delete(`/invoice/${invoiceId}`);
+	await api.delete(`/invoice/${invoiceId}`);
 }

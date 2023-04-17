@@ -1,23 +1,23 @@
 import { prisma } from "@/lib/prisma";
 
 type DbGetInvoicesCountProps = {
-  userId: string;
+	userId: string;
 };
 
 type Response = {
-  count: number;
+	count: number;
 };
 
 export default async function dbGetInvoicesCount({
-  userId,
+	userId,
 }: DbGetInvoicesCountProps): Promise<Response> {
-  const count = await prisma.invoice.count({
-    where: {
-      userId,
-    },
-  });
+	const count = await prisma.invoice.count({
+		where: {
+			userId,
+		},
+	});
 
-  return {
-    count,
-  };
+	return {
+		count,
+	};
 }

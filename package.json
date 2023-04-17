@@ -11,7 +11,7 @@
 		"prisma:generate": "pnpm prisma generate",
 		"docker:up": "docker compose up -d",
 		"docker:down": "docker-compose down",
-		"format": "prettier . --write './{app,pages}/**/*.+(tsx|ts)'"
+		"format": "prettier --write './{app,pages}/**/*.+(tsx|ts)'"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^7.6.0",

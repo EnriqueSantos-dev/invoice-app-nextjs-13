@@ -2,12 +2,12 @@ import { Invoice } from "@/app/types";
 import api from "@/lib/axios";
 
 type GetInvoiceByIdProps = {
-  invoiceId: string;
+	invoiceId: string;
 };
 
 export default async function getInvoiceById({
-  invoiceId,
+	invoiceId,
 }: GetInvoiceByIdProps): Promise<Invoice> {
-  const res = await api.get(`/invoice/${invoiceId}`);
-  return res.data;
+	const res = await api.get(`/invoice/${invoiceId}`);
+	return res.data;
 }

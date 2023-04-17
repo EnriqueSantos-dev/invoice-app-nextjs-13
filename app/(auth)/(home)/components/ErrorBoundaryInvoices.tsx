@@ -6,39 +6,39 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { MdError } from "react-icons/md";
 
 export default function ErrorBoundary({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <QueryErrorResetBoundary>
-      {({ reset }) => (
-        <ReactErrorBoundary
-          onReset={reset}
-          fallbackRender={({ resetErrorBoundary }) => (
-            <div className="w-full p-8 rounded-lg shadow-md flex flex-col gap-3">
-              <div className="flex gap-3 items-center">
-                <MdError className="fill-burntSienna" />
-                <p className="text-burntSienna text-sm font-semibold">
-                  Ops!! Error on loading invoices.
-                </p>
-              </div>
+	return (
+		<QueryErrorResetBoundary>
+			{({ reset }) => (
+				<ReactErrorBoundary
+					onReset={reset}
+					fallbackRender={({ resetErrorBoundary }) => (
+						<div className="flex w-full flex-col gap-3 rounded-lg p-8 shadow-md">
+							<div className="flex items-center gap-3">
+								<MdError className="fill-burntSienna" />
+								<p className="text-sm font-semibold text-burntSienna">
+									Ops!! Error on loading invoices.
+								</p>
+							</div>
 
-              <div className="flex flex-col gap-2 items-start">
-                <p>Reset error by clicking on button in</p>
-                <button
-                  className="rounded px-4 py-1 bg-burntSienna text-white font-bold text-sm"
-                  onClick={resetErrorBoundary}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          )}
-        >
-          {children}
-        </ReactErrorBoundary>
-      )}
-    </QueryErrorResetBoundary>
-  );
+							<div className="flex flex-col items-start gap-2">
+								<p>Reset error by clicking on button in</p>
+								<button
+									className="rounded bg-burntSienna px-4 py-1 text-sm font-bold text-white"
+									onClick={resetErrorBoundary}
+								>
+									Reset
+								</button>
+							</div>
+						</div>
+					)}
+				>
+					{children}
+				</ReactErrorBoundary>
+			)}
+		</QueryErrorResetBoundary>
+	);
 }
