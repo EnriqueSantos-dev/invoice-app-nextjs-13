@@ -1,9 +1,10 @@
 {
-  "extends": "next/core-web-vitals",
-  "plugins": ["prettier"],
-  "rules": {
-    "prettier/prettier": "error",
-    "no-mixed-spaces-and-tabs": "off",
-    "no-unused-vars": "warn"
-  }
+	"extends": ["next/core-web-vitals","prettier", "plugin:tailwindcss/recommended"],
+	"plugins": ["tailwindcss"],
+	"rules": {
+		"no-mixed-spaces-and-tabs": "off",
+		"no-unused-vars": "warn",
+		"tailwindcss/no-custom-classname": "off",
+		"tailwindcss/classnames-order": "error"
+	}
 }
