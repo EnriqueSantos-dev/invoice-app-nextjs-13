@@ -3,7 +3,7 @@ import dbGetInvoiceById from "@/app/lib/prisma/db-get-invoice-by-id";
 import { Status } from "@/app/types";
 import { z } from "zod";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils";
 
 interface Params {
 	params: {

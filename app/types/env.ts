@@ -6,7 +6,7 @@ import { z } from "zod";
 const envObj = dotenv.config();
 dotenvExpand.expand(envObj);
 
-export const envSchema = z.object({
+const envSchema = z.object({
 	GITHUB_CLIENT_ID: z.string(),
 	GITHUB_CLIENT_SECRET: z.string(),
 	GOOGLE_CLIENT_ID: z.string(),
@@ -27,6 +27,4 @@ declare global {
 	}
 }
 
-const getEnv = () => envSchema.parse(process.env);
-
-export const env = getEnv();
+envSchema.parse(process.env);

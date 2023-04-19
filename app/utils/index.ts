@@ -6,3 +6,4 @@ export * from "./get-payment-date-formatted";
 export * from "./mapper-values-form-to-persistence";
 export * from "./remove-id-items";
 export * from "./map-default-values-to-schema-form";
+export * from "./auth";

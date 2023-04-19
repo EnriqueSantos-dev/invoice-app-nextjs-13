@@ -1,5 +1,5 @@
 import { Header } from "@/app/components/Header";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils";
 import { getServerSession } from "next-auth";
 
 export const fetchCache = "force-no-store";

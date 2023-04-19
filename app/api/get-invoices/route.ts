@@ -1,6 +1,6 @@
 import dbGetInvoices from "@/app/lib/prisma/db-get-invoices";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/utils";
 
 export async function GET() {
 	const session = await getServerSession(authOptions);
