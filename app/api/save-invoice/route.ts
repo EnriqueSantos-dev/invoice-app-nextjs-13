@@ -1,7 +1,7 @@
 import z from "zod";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const schema = z.object({
 	invoice: z.object({

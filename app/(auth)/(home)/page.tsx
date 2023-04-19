@@ -1,6 +1,6 @@
 import { ActiveBar, InvoiceItemSkeleton } from "@/app/components";
 import dbGetInvoicesCount from "@/lib/prisma/db-get-invoices-count";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Suspense } from "react";
