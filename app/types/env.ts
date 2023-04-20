@@ -12,7 +12,7 @@ const envSchema = z.object({
 	GOOGLE_CLIENT_ID: z.string(),
 	GOOGLE_CLIENT_SECRET: z.string(),
 	DATABASE_URL: z.string(),
-	NEXTAUTH_URL: z.string(),
+	NEXTAUTH_URL: z.optional(z.string()),
 	NEXTAUTH_SECRET: z.string(),
 	POSTGRES_DB: z.optional(z.string()),
 	POSTGRES_PASSWORD: z.optional(z.string()),
